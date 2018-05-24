@@ -18,7 +18,7 @@ def dex(data):
         settings.init()
     # Handle different types of data argument
     if isinstance(data, dict):
-        settings.dataframes = {k: v for k, v in data.items() if isinstance(eval(k), pd.core.frame.DataFrame)}
+        settings.dataframes = {k: v for k, v in data.items() if isinstance(v, pd.core.frame.DataFrame)}
     elif isinstance(data, pd.core.frame.DataFrame):
         settings.dataframes[retrieve_name(data)] = data
     # Run data explorer
