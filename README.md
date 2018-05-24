@@ -12,7 +12,7 @@ Statistical tests performed on data (immediate, automaticresults).
 Tool still under development, actively applied in practice.
 
 # PyDex - Graphical User Interface
-![alt text](screenshots/3.png "Graphical User Interface")
+![alt text](screenshots/2.png "Graphical User Interface")
 # Importing data from files
 ![alt text](screenshots/3.png "Importing data from files")
 # Example: histogram
