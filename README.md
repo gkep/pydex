@@ -1,15 +1,15 @@
 # PyDex
-Data analysis tool developed in ArcelorMittal Poland
+Data analysis tool developed and used in ArcelorMittal Poland
 
-This tool is created to support process engineers in data analysis.
-Graphical user interface prepared with tkinter.
-Created, developped and tested in new version of Anaconda environment, also used on Jupyter.
+Application has been created to support process engineers in data analysis.
+Graphical user interface prepared with tkinter package.
+Created, developped and tested in new versions of Anaconda environment, also used via Jupyter.
 
-Supports Dataframe format data, also can load files in xlsx, pkl, csv formats.
+Supports Dataframe format (Pandas), also can load files in xlsx, pkl, csv formats.
 Results can be exported as png graphs.
-Statistical tests performed online on data.
+Statistical tests performed on data (immediate, automaticresults).
 
-The tool still under development, actively applied in practice.
+Tool still under development, actively applied in practice.
 
 # PyDex - Graphical User Interface
 ![alt text](screenshots/3.png "Graphical User Interface")
