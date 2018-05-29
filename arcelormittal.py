@@ -7,20 +7,27 @@ ArcelorMittal Functions
 
 #%% Import statements
 #from data import data
+
+try:
+    from data import data
+except ImportError:
+    print('data not imported!!!')
 from explore import explore
 import settings
 import pandas as pd
 import inspect
 
-def dex(data):
+def dex(d={}):
+
     # Check if 'dataframes' attribute exists and initialize if necessary
     if not hasattr(settings, 'dataframes'):
         settings.init()
     # Handle different types of data argument
-    if isinstance(data, dict):
-        settings.dataframes = {k: v for k, v in data.items() if isinstance(v, pd.core.frame.DataFrame)}
-    elif isinstance(data, pd.core.frame.DataFrame):
-        settings.dataframes[retrieve_name(data)] = data
+    if isinstance(d, dict):
+        settings.dataframes = {k: v for k, v in d.items() if isinstance(v, pd.core.frame.DataFrame)}
+    elif isinstance(d, pd.core.frame.DataFrame):
+        settings.dataframes[retrieve_name(d)] = d
+    
     # Run data explorer
     app = explore() # <-- data
     app.master.title('PyExplore - Python Data Exploration Tool - version 0.1')

@@ -760,7 +760,7 @@ def graph_bar(y, x='', select='', groupby='', constant=None,
     2018-02-16 - luc.vandeputte@arcelormittal.com
     """
 
-    Y, X, X_reg, xlabel, ylabel, labels, stats = graph(y, '', select, groupby)
+    Y, X, X_reg, xlabel, ylabel, labels, stats = graph(y, x, select, groupby)
     
     # Remove nans from Y list
     Y = [y.dropna() for y in Y]
@@ -785,14 +785,31 @@ def graph_bar(y, x='', select='', groupby='', constant=None,
     # Median properties
     medianprops = dict(color='#FF1010', linewidth=1)
     # Plot the points
-    ax.boxplot(Y, notch=True, patch_artist=False, labels=labels, 
-                    boxprops=boxprops, whiskerprops=whiskerprops, flierprops=flierprops, capprops=capprops, medianprops=medianprops)
+    #ax.boxplot(Y, notch=True, patch_artist=False, labels=labels, 
+    #                boxprops=boxprops, whiskerprops=whiskerprops, flierprops=flierprops, capprops=capprops, medianprops=medianprops)
+    
+    X = [ series.values for series in X]
+    Y = [ series.values for series in Y]
+    
+    # case 1 y and 0 x
+    if( x=='' and (',' not in y) ):
+        Y = Y[0]
+        X = range(len(X[0]))
+        ax.bar(X, Y)
+    # case 1 y and 1 x
+    elif( (',' not in x) and (',' not in y) ):
+        Y = Y[0]
+        X = X[0]
+        ax.bar(X, Y)
+    # case N y and 1 x
+    #elif( (',' not in x) and (',' in y) ):
+        
     # Set grid on
     ax.grid(True)
-    #ax.legend()
+    ax.legend()
     ax.set_title(title)
-    #ax.set_xlabel(xlabel)
-    #ax.set_ylabel(ylabel)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
 
     if xlim is not None:
         ax.set_xlim(xlim)

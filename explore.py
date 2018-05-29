@@ -158,16 +158,18 @@ class explore(ttk.Frame):
         self.textInfo.delete('1.0', tk.END)
         # Clear old graph
         self.ax.clear() 
-            
-        if len(self.values(self.entryX).unique()) < 100:
-            # Create graph
-            stats = graph.graph_hist(self.entryY.get(), bins=self.entryBins.get(), select=self.entryS.get(), groupby=self.entryG.get(),
-                                        cumulative=self.cumulative.get(), percentage=self.percentage.get(), histtype=self.histtype.get(),
-                                        xlim=None, ylim=None, size=(10, 6), ax=self.ax)
-            # Show stats
-            self.textInfo.insert('1.0', stats)    
-        else:
-            messagebox.showinfo('Warning','Too many categories')
+        #if len(self.values(self.entryX).unique()) < 100:
+        #    # Create graph
+        #    stats = graph.graph_hist(self.entryY.get(), bins=self.entryBins.get(), select=self.entryS.get(), groupby=self.entryG.get(),
+        #                                cumulative=self.cumulative.get(), percentage=self.percentage.get(), histtype=self.histtype.get(),
+        #                                xlim=None, ylim=None, size=(10, 6), ax=self.ax)
+        #    # Show stats
+        #    self.textInfo.insert('1.0', stats)    
+        #else:
+        #    messagebox.showinfo('Warning','Too many categories')
+        stats = graph.graph_bar(self.entryY.get(), self.entryX.get(), select=self.entryS.get(), groupby=self.entryG.get(),
+                                        constant=None, xlim=None, ylim=None, size=(10, 6), ax=self.ax)
+    
         # Update canvas
         self.canvas.show()
         return
@@ -339,14 +341,19 @@ class explore(ttk.Frame):
             xl = pd.ExcelFile(filename)
             nSheets = len(xl.sheet_names)
             if( nSheets == 1 ):
+                dfName = tkSD.askstring("Edit name for dataset", "Give a name", initialvalue=dfName)
+                dfName = CorrectString(dfName)
                 exec("settings.dataframes['" + dfName +"'] = pd.read_excel('" + filename +"')")
+                self.comboboxDataframes.set(dfName)
             elif( nSheets > 1 ):
                 sheetName = tkSD.askOptions( self, xl.sheet_names, 'Choose Excel sheet to import')
                 if(sheetName == ""): # case of pressing ESC
                     return
+                dfName = tkSD.askstring("Edit name for dataset", "Give a name", initialvalue=sheetName)
+                dfName = CorrectString(dfName)
                 sheetName = CorrectString(sheetName)
-                exec("settings.dataframes['" + sheetName +"'] = pd.read_excel('" + filename +"', sheet_name=sheetName)")
-            self.comboboxDataframes.set(sheetName)
+                exec("settings.dataframes['" + dfName +"'] = pd.read_excel('" + filename +"', sheet_name=sheetName)")
+                self.comboboxDataframes.set(dfName)
             
         elif(extension == 'pkl'):
             exec("settings.dataframes['" + dfName +"'] = pd.read_pickle('" + filename +"')")
