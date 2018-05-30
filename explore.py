@@ -193,11 +193,11 @@ class explore(ttk.Frame):
             # normal boxplot - if  no bins
             if( self.nBinsBoxplot.get() == '' or ',' in self.entryY.get() ): 
                 stats = graph.graph_boxplot(self.entryY.get(), select=self.entryS.get(), groupby=self.entryG.get(),
-                                               xlim=None, ylim=None, size=(10, 6), ax=self.ax, srt=self.sortBoxplot.get() )
+                                               xlim=None, ylim=None, size=(10, 6), ax=self.ax, srt=self.sortBoxplot.get(), threshold=int(self.cTreshBoxplot.get()) )
             # mono-boxplot - when bins and 1 variable
             elif( (',' not in self.entryY.get()) and len(self.entryY.get()) > 0 ): 
-                stats = graph.graph_mono_boxplot(self.entryY.get(), select=self.entryS.get(), bins=self.nBinsBoxplot.get(),
-                                                   xlim=None, ylim=None, title='', size=(10, 6), ax=self.ax)
+                stats = graph.graph_mono_boxplot(self.entryY.get(), select=self.entryS.get(), bins=self.nBinsBoxplot.get(), 
+                                                   xlim=None, ylim=None, title='', size=(10, 6), ax=self.ax, threshold=int(self.cTreshBoxplot.get()))
         
         # Show stats
         self.textInfo.insert('1.0', stats)    
@@ -610,8 +610,16 @@ class explore(ttk.Frame):
         self.checkSortBx.grid(row=1, column=0, sticky=tk.W, padx=5, pady=5)
         
         self.nBinsBoxplot = tk.StringVar(value='')
-        self.selectNBins   = ttk.Entry(self.frameBoxplot, text='Bins', textvariable=self.nBinsBoxplot  )
-        self.selectNBins.grid(row=2, column=0, sticky=tk.W, padx=5, pady=5)
+        self.selectNBins   = ttk.Entry(self.frameBoxplot, text='Bins', textvariable=self.nBinsBoxplot)
+        self.selectNBins.grid(row=3, column=0, sticky=tk.W, padx=5, pady=5)
+        self.selectNBLab = ttk.Label(self.frameBoxplot, text='Bins')
+        self.selectNBLab.grid(row=2, column=0, sticky=tk.W, padx=5, pady=5)
+        
+        self.cTreshBoxplot = tk.StringVar(value='1')
+        self.selectThresh   = ttk.Entry(self.frameBoxplot, text='Threshold', textvariable=self.cTreshBoxplot)
+        self.selectThresh.grid(row=5, column=0, sticky=tk.W, padx=5, pady=5)
+        self.selectThLab = ttk.Label(self.frameBoxplot, text='Count threshold')
+        self.selectThLab.grid(row=4, column=0, sticky=tk.W, padx=5, pady=5)
         
         self.frameBoxplot.grid_forget()
         #%% MIDDLE

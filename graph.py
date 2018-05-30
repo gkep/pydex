@@ -524,7 +524,7 @@ def graph_trend(y, x='', select='', groupby='', mf=False, mf_type='mean', mf_win
     return stats
 #%%
 def graph_boxplot(y, select='', groupby='', constant=None,
-             xlim=None, ylim=None, size=(10, 6), ax=None, srt=None):
+             xlim=None, ylim=None, size=(10, 6), ax=None, srt=None, threshold=1 ):
     """ stats = graph_boxplot(y, x=None, select=None, groupby=None, constant=None,
                                xlim=None, ylim=None, size=(10, 6), ax=None)
 
@@ -566,9 +566,16 @@ def graph_boxplot(y, select='', groupby='', constant=None,
     mns = stats['50%']
     #makes sorting
     if srt is not None:
+        temp = zip( stats['50%'], stats['count'],  Y, labels)
+        # threshold for counts
+        temp2 = [x for x in temp if(x[1] >= threshold)  ]
         if srt:
-            mns, cnt, Y, labels = zip(*sorted(zip( stats['50%'], stats['count'],  Y, labels), reverse=True))
-                       
+            # count threshold applied
+            mns, cnt, Y, labels = zip(*sorted(temp2, reverse=True))
+        else:
+            mns, cnt, Y, labels = zip(*temp2)
+
+            
     # required for the boxplot (drop the indexes)
     Y = [series.values for series in Y]
     # Plot the points
@@ -576,7 +583,6 @@ def graph_boxplot(y, select='', groupby='', constant=None,
                     boxprops=boxprops, whiskerprops=whiskerprops, flierprops=flierprops, capprops=capprops, medianprops=medianprops)
     # Set grid on
     ax.grid(True)
-    #ax.legend()
     ax.set_title(title)
     #ax.set_xlabel(xlabel)
     #ax.set_ylabel(ylabel)
@@ -609,7 +615,7 @@ def graph_boxplot(y, select='', groupby='', constant=None,
 
 #%%
 def graph_mono_boxplot(y, select='', bins='auto', constant=None,
-             xlim=None, ylim=None, title='', size=(10, 6), ax=None):
+             xlim=None, ylim=None, title='', size=(10, 6), ax=None, threshold=1):
     
     # initial data processing
     Y0, X0, xreg, xlabel, ylabel, labels0, stats0 = graph(y, '', select, '')
@@ -672,7 +678,7 @@ def graph_mono_boxplot(y, select='', bins='auto', constant=None,
         Y, X, xreg, xlabel1, ylabel1, labels1, stat = graph(y, '', selct, '')
         # in case bin is not empty
         #print(stat['count'].values[0])
-        if( stat['count'].values[0] >0 ):
+        if( stat['count'].values[0] >= threshold ):
             lab = format( float(bbb), '.5g') + ' - ' + format( float(bbb+jmp), '.5g') 
             yy.append( Y[0] )
             labels.append( lab )
